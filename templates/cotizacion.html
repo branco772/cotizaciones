@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>COTIZACION</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"  rel="stylesheet" />
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+            input[type=number]::-webkit-outer-spin-button,
+            input[type=number]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .notifications-container {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+            }
+            .notification {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                padding: 10px;
+                border-radius: 5px;
+                color: #fff;
+                font-weight: bold;
+                z-index: 9999;
+                display: none;
+                margin-top: 10px;
+            }
+            
+            .alert-success {
+                background-color: green;
+            }
+            
+            .alert-info {
+                background-color: blue;
+            }
+            
+            .alert-warning {
+                background-color: orange;
+            }
+            
+            .alert-danger {
+                background-color: red;
+            }
+            .messages {
+                list-style-type: none;
+                padding: 10px;
+                margin: 10px 0;
+                background-color: #f0f0f0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            /* Estilo para cada mensaje individual */
+            .messages li {
+                margin-bottom: 5px;
+                padding: 5px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+        
+            /* Estilos para diferentes tipos de mensajes */
+            .messages li.warning {
+                background-color: #ffeeba;
+                border-color: #ffc107;
+            }
+        
+            .messages li.error {
+                background-color: #f8d7da;
+                border-color: #dc3545;
+            }
+        
+            .messages li.success {
+                background-color: #d4edda;
+                border-color: #28a745;
+            }
+        </style>
+    </head>
+        {% include "navegacion.html" %}
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                        <form id="form" class="w-full max-w-lg" method="POST" action="{% url 'enviarformulario' %}" enctype="multipart/form-data"><!--  -->
+                            {% csrf_token %}
+                            <div class="flex flex-wrap -mx-3 mb-6">
+                                <div class="w-full md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="cliente">
+                                    Cliente
+                                </label>
+                                <input id="cliente" name="cliente" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="" pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" required>
+                                </div>
+                                <div class="w-full md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="direccion">
+                                    direccion
+                                </label>
+                                <input id="direccion" name="direccion" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="" required>
+                                </div>
+                                <div class="w-full md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="telefono">
+                                    telefono/celular
+                                </label>
+                                <input  id="telefono"  name="telefono" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="telefono" type="number" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" required>
+                                </div>
+                                <div class="w-full md:w-1/2 px-3">
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="ciudad">
+                                    ciudad
+                                </label>
+                                <input id="ciudad" name="ciudad" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="" required>
+                                </div>
+                            </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </section> 
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+            <!-- Start coding here -->
+            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="table-fixed w-full">
+                        
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">ITEM</th>
+                                <th scope="col" class="px-4 py-3">DESCRIPCION</th>
+                                <th scope="col" class="px-4 py-3" for="cantidad">CANTIDAD</th>
+                                <th scope="col" class="px-4 py-3" for="valorUnitario">VALOR UNITARIO</th>
+                                <th scope="col" class="px-4 py-3" for="total">VALOR TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla" class=" md:w-1/2 px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        </tbody>
+                        
+                        <tr>
+                            <th scope="row" class=" md:w-1/2 px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"><textarea name="descripcionServicio" id="descripcionServicio" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ingrese la descripcion del servicio"></textarea></th>
+                            <th class="px-1 py-3 font-normal md:font-bold"><p>TOTAL:</p><label id="totalsuma" name="totalsuma">0</label><p>Bs.</p></th>
+                            <th>
+                                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="descuento">
+                                    ¿DESEA APLICAR ALGUN DESCUENTO?:
+                                </label>
+                                <input oninput="totalDescuento()" id="descuento"  name="descuento" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="number" value="0">
+                                
+                            </th>
+                            <th class="px-4 py-3"><p>PRECIO CON DESCUENTO:</p><label id="precioDescuento" name="precioDescuento">0</label><p>Bs.</p></th>                          
+                        </tr>   
+                    </table>
+                </div>
+                <input type="hidden" name="tabla_data" id="tabla_data">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" onclick="enviarTabla()">ENVIAR</button>
+                
+            </form>  
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="agregarFila()">Agregar fila</button>        
+                <div data-dial-init class="fixed bottom-6 right-6 group flex flex-col items-center mb-4 space-y-2">
+                    <!--<button id="generarPdf" name="generarPdf" type="button" class="w-[56px] h-[56px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400">
+                        <svg aria-hidden="true" class="w-6 h-6 mx-auto mt-px" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 00-2 0v1.586l-.293-.293a.999.999 0 10-1.414 1.414l2 2a.999.999 0 001.414 0l2-2a.999.999 0 10-1.414-1.414l-.293.293V9z" fill-rule="evenodd"></path></svg>
+                        <span class="block mb-px text-xs font-medium">Save</span>
+                    </button>    
+                </div>-->
+            </div>
+        </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" >
+        function actualizarTotales() {
+            let suma=0;
+            for (let i = 1; i <= 11; i++) {
+                let cantidad = parseFloat(document.getElementById(`cantidad${i}`).value);
+                let valorUnitario = parseFloat(document.getElementById(`valorUnitario${i}`).value);
+                let total = cantidad * valorUnitario;
+                document.getElementById(`total${i}`).textContent = total.toFixed(2);
+                suma += parseInt(document.getElementById(`total${i}`).innerHTML);
+            }
+            document.getElementById("sumaTotal").innerHTML = suma;
+            let sumaTotal=document.getElementById("sumaTotal").innerHTML = suma;
+            }
+            
+            // Agregar un listener al evento 'input' de los inputs de cantidad y valor unitario
+            for (let i = 1; i <= 11; i++) {
+                let cantidadInput = document.getElementById(`cantidad${i}`);
+                let valorUnitarioInput = document.getElementById(`valorUnitario${i}`);
+                
+                cantidadInput.addEventListener('input', actualizarTotales);
+                valorUnitarioInput.addEventListener('input', actualizarTotales);
+            }
+        function totalDescuento(){
+            let des= parseFloat(document.getElementById('descuento').value);
+            let total=parseFloat(document.getElementById('totalsuma').innerHTML);
+            des=total*(des/100);
+            let resultado=total-des;
+            document.getElementById("precioDescuento").textContent = resultado.toFixed(2);
+            calcularTotalTabla();
+        }
+        /*let id=1;
+        function agregarFila() {
+            console.log("Función agregarFila() se ha llamado");
+            let table = document.getElementById("tabla-body");
+            let row = table.insertRow(-1);
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            let cell5 = row.insertCell(4);
+
+            cell1.innerHTML = id; // Establecer el ID y luego incrementar
+            id++; // Incrementar el ID
+
+            cell2.innerHTML = '<input type="text" name="descripcion[]">';
+            cell3.innerHTML = '<input type="number" name="cantidad[]" onchange="actualizarPrecioTotal(this)">';
+            cell4.innerHTML = '<input type="number" name="vrunitario[]" onchange="actualizarPrecioTotal(this)">';
+            cell5.innerHTML = '<input type="number" name="vrtotal[]" readonly>';
+            let newRow = tbody.insertRow();
+            newRow.className = "bg-white";
+            
+            let idCell = newRow.insertCell();
+            idCell.className = "border px-4 py-2";
+            let idInput = document.createElement("input");
+            idInput.type = "text";
+            idInput.name = "id";
+            idInput.className = "w-full";
+            idCell.appendChild(idInput);
+        
+            let descripcionCell = newRow.insertCell();
+            descripcionCell.className = "border px-4 py-2";
+            let descripcionInput = document.createElement("input");
+            descripcionInput.type = "text";
+            descripcionInput.name = "descripcion";
+            descripcionInput.className = "w-full";
+            descripcionCell.appendChild(descripcionInput);
+        
+            let cantidadCell = newRow.insertCell();
+            cantidadCell.className = "border px-4 py-2";
+            let cantidadInput = document.createElement("input");
+            cantidadInput.type = "number";
+            cantidadInput.name = "cantidad";
+            cantidadInput.className = "w-full";
+            cantidadInput.setAttribute("oninput", "actualizarPrecioTotal(this)");
+            cantidadCell.appendChild(cantidadInput);
+        
+            let vrunitarioCell = newRow.insertCell();
+            vrunitarioCell.className = "border px-4 py-2";
+            let vrunitarioInput = document.createElement("input");
+            vrunitarioInput.type = "number";
+            vrunitarioInput.name = "vrunitario";
+            vrunitarioInput.className = "w-full";
+            vrunitarioInput.setAttribute("oninput", "actualizarPrecioTotal(this)");
+            vrunitarioCell.appendChild(vrunitarioInput);
+        
+            let vrtotalCell = newRow.insertCell();
+            vrtotalCell.className = "border px-4 py-2";
+            let vrtotalInput = document.createElement("input");
+            vrtotalInput.type = "number";
+            vrtotalInput.name = "vrtotal";
+            vrtotalInput.className = "w-full";
+            vrtotalInput.disabled = true;
+            vrtotalCell.appendChild(vrtotalInput);
+        }
+        function actualizarPrecioTotal(input) {
+            let row = input.parentNode.parentNode;
+            let cantidad = row.cells[2].getElementsByTagName("input")[0].value;
+            let vrunitario = row.cells[3].getElementsByTagName("input")[0].value;
+            let vrtotal = cantidad * vrunitario;
+            row.cells[4].getElementsByTagName("input")[0].value = vrtotal;
+        }*/
+        
+        function agregarFila() {
+          // Obtener referencia a la tabla
+          var tabla = document.getElementById("tabla");
+          
+          // Crear una nueva fila
+          var nuevaFila = tabla.insertRow();
+          
+          // Crear las celdas de la fila
+          var idCelda = nuevaFila.insertCell(0);
+          var descripcionCelda = nuevaFila.insertCell(1);
+          var cantidadCelda = nuevaFila.insertCell(2);
+          var vrunitarioCelda = nuevaFila.insertCell(3);
+          var vrtotalCelda = nuevaFila.insertCell(4);
+          var total = total+vrtotalCelda;
+          // Asignar los valores a las celdas
+          idCelda.innerHTML = tabla.rows.length - 1; // El ID es autoincrementable
+          descripcionCelda.innerHTML = "<select class='p-2 appearance-none block w-2/3 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'>{% for material in materiales %}<option value='{{ material.nombrematerial }}'>{{ material.nombrematerial }}</option>{% endfor %}</select>";
+          cantidadCelda.innerHTML = "<input required class='appearance-none block w-2/3 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500' type='number' id='cantidad[]' name='cantidad[]' onchange='actualizarTotal(this.parentNode.parentNode)'>";
+          vrunitarioCelda.innerHTML = "<input required class='appearance-none block w-2/3 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500' type='number' id='vrunitario[]' name='vrunitario[]' onchange='actualizarTotal(this.parentNode.parentNode)'>";
+          vrtotalCelda.innerHTML = "<input class='appearance-none block w-2/3 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500' type='number' id='vrtotal[]' name='vrtotal[]' readonly>";
+          total.innerHTML = "<input type='number' id='sumatotal[]' name='sumatotal[]' readonly>";
+          // Enfocar el primer campo de la nueva fila
+          descripcionCelda.firstChild.focus();
+          
+          document.getElementById("totalsuma").textContent = total.toFixed(2);
+        }
+        
+        
+
+        function actualizarTotal(fila) {
+          var cantidad = fila.cells[2].querySelector("input").value;
+          var vrunitario = fila.cells[3].querySelector("input").value;
+          var vrtotal = cantidad * vrunitario;
+          fila.cells[4].querySelector("input").value = vrtotal;
+          calcularTotalTabla();
+        }
+        function enviarTabla() {
+          var tabla = document.getElementById("tabla");
+          var tabla_data = [];
+          for (var i = 0; i < tabla.rows.length; i++) {
+            var fila = tabla.rows[i];
+            var descripcion = fila.cells[1].querySelector("select").value;
+            var cantidad = fila.cells[2].querySelector("input").value;
+            var vrunitario = fila.cells[3].querySelector("input").value;
+            var vrtotal = fila.cells[4].querySelector("input").value;
+            tabla_data.push({
+              "descripcion": descripcion,
+              "cantidad": cantidad,
+              "vrunitario": vrunitario,
+              "vrtotal": vrtotal
+            });
+
+            Swal.fire({
+                titleText:"COTIZACION REGISTRADA",
+                icon:"success",
+                confirmButtonText:"OK",
+            })
+          }
+          document.getElementById("tabla_data").value = JSON.stringify(tabla_data);
+          document.getElementById("formulario").submit();
+          
+        
+        }
+        function calcularTotalTabla() {
+            let total = 0;
+            const tabla = document.getElementById('tabla'); // Cambia 'miTabla' por el ID de tu tabla
+        
+        for (let i = 0; i < tabla.rows.length; i++) { // Empezamos desde la fila 1 para ignorar el encabezado
+            const valorCelda = parseFloat(tabla.rows[i].cells[4].querySelector("input").value);
+            total += isNaN(valorCelda) ? 0 : valorCelda;
+        }
+    
+        document.getElementById("totalsuma").textContent = total.toFixed(2);
+        }
+
+    </script>
+    <script>
+        document.getElementById("generarPdf").addEventListener("click", function(){
+            document.getElementById("form").submit();
+            var sumaTotal= document.getElementById('sumaTotal').value;
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            {% if messages %}
+                var notificationsContainer = $('<div class="notifications-container"></div>');
+                $('body').append(notificationsContainer);
+        
+                {% for message in messages %}
+                    var notification = $('<div class="notification alert alert-{{ message.tags }}">{{ message }}</div>');
+                    notificationsContainer.append(notification);
+        
+                    notification.hide().fadeIn().delay(5000).fadeOut(function() {
+                        $(this).remove();
+                    });
+                {% endfor %}
+            {% endif %}
+        });         
+    </script>
+    </body>
+</html>
+    

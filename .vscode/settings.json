@@ -1,0 +1,12 @@
+{
+    "python.analysis.extraPaths": [
+        "./cotizaciones"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
+    "cSpell.words": [
+        "enviarformulario"
+    ]
+}

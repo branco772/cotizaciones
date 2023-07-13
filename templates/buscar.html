@@ -1,0 +1,97 @@
+<!-- Template: buscar_cotizaciones.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Buscar Cotizaciones</title>
+</head>
+<body>
+    {% include "navegacion.html" %}
+    <div class="col m-5">
+    <h1>Buscar Cotizaciones</h1>
+    <form method="GET" action="{% url 'buscarcotizaciones' %}">
+        <label for="numero_factura">Número de Factura:</label>
+        <input type="text" id="numero_factura" name="numero_factura">
+        
+        <button type="submit" class="btn btn-outline-primary btn-sm">Buscar</button>
+    </form>
+    
+    {% if cotizaciones %}
+        <h2>Resultados de la búsqueda:</h2>
+        <form id="formulario"  method="POST" action="{% url 'enviarformularioOrden' %}"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <table id="tabla" class="table-striped table-bordered">
+            <thead class="table table-success">
+                <tr>
+                    <th scope="" class="">CODIGO</th>
+                    <th scope="" class="">CLIENTE</th>
+                    <th scope="" class="">DIRECCION</th>
+                    <th scope="" class="">TELEFONO</th>
+                    <th scope="" class="">CIUDAD</th>
+                    <th scope="" class="">DESCRIPCION</th>
+                    <th scope="" class="">CANTIDAD</th>
+                    <th scope="" class="">VALOR UNITARIO</th>
+                    <th scope="" class="">VALOR TOTAL</th>
+                    <th scope="" class="">DESCUENTO</th>
+                    <th scope="" class="">SERVICIO TOTAL</th>
+                    <th scope="" class="">DESCRIPCION SERVICIO</th>
+                    <th scope="" class="">FECHA</th>
+                    <!-- Agrega más encabezados según tus necesidades -->
+                </tr>
+            </thead>
+                <tbody id="tabla">
+                    {% for cotizacion in cotizaciones %}
+                        <tr>
+                            <td>{{cotizacion.codigo}}</td>
+                            <td><input type="hidden"  id="cliente" name="cliente" value="{{cotizacion.cliente}}">{{cotizacion.cliente}}</td>
+                            <td><input type="hidden" id="direccion" name="direccion" value="{{cotizacion.direccion}}">{{cotizacion.direccion}}</td>
+                            <td><input type="hidden" id="telefono" name="telefono" value="{{cotizacion.telefono}}">{{cotizacion.telefono}}</td>
+                            <td><input type="hidden" id="ciudad" name="ciudad" value="{{cotizacion.ciudad}}">{{cotizacion.ciudad}}</td>
+                            <td><input type="hidden" id="descripcion" name="descripcion" value="{{cotizacion.descripcion}}">{{cotizacion.descripcion}}</td>
+                            <td><input type="hidden" id="cantidad" name="cantidad" value="{{cotizacion.cantidad}}">{{cotizacion.cantidad}}</td>
+                            <td><input type="hidden" id="vrunitario" name="vrunitario" value="{{cotizacion.valorunitario}}">{{cotizacion.valorunitario}}</td>
+                            <td><input type="hidden" id="vrtotal" name="vrtotal" value="{{cotizacion.valortotal}}">{{cotizacion.valortotal}}</td>
+                            <td><input type="hidden"  id="descuento" name="descuento" value="{{cotizacion.descuento}}">{{cotizacion.descuento}}</td>
+                            <td><input type="hidden"  id="serviciototal" name="serviciototal" value="{{cotizacion.serviciototal}}">{{cotizacion.serviciototal}}</td>
+                            <td><input type="hidden"  id="descripcionServicio" name="descripcionServicio" value="{{ cotizacion.descripcionservicio }}">{{cotizacion.descripcionservicio}}</td>
+                            <td>{{cotizacion.fecha}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" id="tabla_data" name="tabla_data">
+            <button type="submit" class="btn btn-outline-primary btn-sm mt-2" >IMPRIMIR ORDEN DE TRABAJO</button>
+        </form>
+    {% endif %}
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    var tablaData = [];
+    $('#tabla tr').each(function() {
+      var descripcion = $(this).find('td:eq(5)').text();
+      var cantidad = $(this).find('td:eq(6)').text();
+      var vrunitario = $(this).find('td:eq(7)').text();
+      var vrtotal = $(this).find('td:eq(8)').text();
+
+      // Validar si todos los campos están vacíos
+      if (descripcion.trim() === "" && cantidad.trim() === "" && vrunitario.trim() === "" && vrtotal.trim() === "") {
+        return; // Omitir este objeto y pasar a la siguiente fila
+      }
+
+      tablaData.push({
+        descripcion: descripcion,
+        cantidad: cantidad,
+        vrunitario: vrunitario,
+        vrtotal: vrtotal
+      });
+    });
+
+    $('#tabla_data').val(JSON.stringify(tablaData));
+  });
+</script>
+
+</html>
